@@ -107,6 +107,7 @@ public class UserdaoTest {
 	
 	@Test
 	public void count() throws SQLException{
+		
 
 		
 		dao.deleteAll();
@@ -131,8 +132,8 @@ public class UserdaoTest {
 		dao.get("unknown_id");
 	}
 	
-	public static void main(String[] args) {
-		JUnitCore.main("springbook.user.domain.UserdaoTest");
-	}
+//	public static void main(String[] args) {
+//		JUnitCore.main("springbook.user.domain.UserdaoTest");
+//	}
 
 }
