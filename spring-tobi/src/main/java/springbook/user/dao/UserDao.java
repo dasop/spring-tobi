@@ -8,6 +8,8 @@ import java.sql.SQLException;
 import javax.sql.DataSource;
 
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.PreparedStatementCreator;
 
 //import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
@@ -20,16 +22,19 @@ public class UserDao {
 //	jdbcContextWithStatementStrategy 함수를 클래스 분리
 // 1. 별도 JdbcContext 클래스로 분리
 	private DataSource dataSource;
+	private JdbcTemplate jdbcTemplate;
 	
 	public void setDataSource(DataSource dataSource) {
+		this.jdbcTemplate = new JdbcTemplate(dataSource);
 		this.dataSource = dataSource;
 	}
 //2. JdbcContext 를 DI로 받음
-	private JdbcContext jdbcContext;
+//	private JdbcContext jdbcContext;
 	
-	public void setJdbcContext(JdbcContext jdbcContext) {
-		this.jdbcContext = jdbcContext;
-	}
+//	public void setJdbcContext(JdbcContext jdbcContext) {
+//		this.jdbcContext = jdbcContext;
+//
+//	}
 
  //생성자 사용한 의존관계 주입	
 //	public UserDao(ConnectionMaker connectionMaker) {
@@ -161,7 +166,14 @@ public class UserDao {
 //			}
 //		});
 		
-		this.jdbcContext.executeSql("insert into users(id, name, password) values(?,?,?)",user.getId(),user.getName(),user.getPassword());
+		/*
+		 * this.jdbcContext.
+		 * executeSql("insert into users(id, name, password) values(?,?,?)",user.getId()
+		 * ,user.getName(),user.getPassword());
+		 */
+		
+		this.jdbcTemplate.update("insert into users(id, name, password) values(?,?,?)",
+				user.getId(),user.getName(),user.getPassword());
 	}		
 
 	
@@ -302,8 +314,20 @@ public class UserDao {
 		
 	}
 */	
-	public void deleteAll() throws SQLException{
-		this.jdbcContext.executeSql("delete from users");
+	/*
+	 * public void deleteAll() throws SQLException{
+	 * this.jdbcContext.executeSql("delete from users"); }
+	 */
+	
+	/*
+	 * public void deleteAll() { this.jdbcTemplate.update( new
+	 * PreparedStatementCreator() { public PreparedStatement
+	 * createPreparedStatement(Connection con) throws SQLException { return
+	 * con.prepareStatement("delete from users"); } } ); }
+	 */
+	
+	public void deleteAll() {
+		this.jdbcTemplate.update("delete from users");
 	}
 	
 
